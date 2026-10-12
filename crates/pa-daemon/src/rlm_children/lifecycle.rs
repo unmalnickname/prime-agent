@@ -1,6 +1,7 @@
 //! The child-lifecycle concern: session creation (create/launch), the
 //! prompt/kill/close routing, settle watching with its notices, and the
 //! spawn-admission outbox types (`CreatedSessionIds`, `CreatedChild`).
+use super::salvage::salvage_digest_from_session_file;
 use super::{
     anyhow, cap_text, compact_rlm_text, create_rlm_child_failure_message,
     create_rlm_child_terminal_notice, json, now_ms, Arc, ChildCloseReason, ChildRecord, Context,
@@ -622,19 +623,39 @@ impl SupervisorChildSessionsInner {
     /// notice claim collapses the races between the watcher, a natural
     /// settle during `delete_subagent`, and the delete path itself.
     async fn deliver_settle_notice(&self, record: &Arc<Mutex<ChildRecord>>) {
-        let message = {
+        let (child_id, session_name, preview, session_file) = {
             let mut record = record.lock().await;
             if record.notice_delivered || record.replied_since_task {
                 return;
             }
             record.notice_delivered = true;
-            let notice = RlmChildTerminalNotice::CompletedWithoutReply {
-                child_id: record.rlm_child_id.clone(),
-                session_name: record.session_name.clone(),
-                last_assistant_text_preview: record.answer_preview.clone(),
-            };
-            create_rlm_child_terminal_notice(&notice, now_ms())
+            (
+                record.rlm_child_id.clone(),
+                record.session_name.clone(),
+                record.answer_preview.clone(),
+                record.session_file.clone().filter(|path| !path.is_empty()),
+            )
         };
+        // The salvage digest is a best-effort, offline extraction from the
+        // child's durable transcript: the file read runs on the blocking
+        // pool (the usage walk's discipline) and every failure degrades to
+        // no digest, never to a missing notice.
+        let salvage_summary = match session_file {
+            Some(path) => tokio::task::spawn_blocking(move || {
+                salvage_digest_from_session_file(Path::new(&path))
+            })
+            .await
+            .ok()
+            .flatten(),
+            None => None,
+        };
+        let notice = RlmChildTerminalNotice::CompletedWithoutReply {
+            child_id,
+            session_name,
+            last_assistant_text_preview: preview,
+            salvage_summary,
+        };
+        let message = create_rlm_child_terminal_notice(&notice, now_ms());
         self.deliver_terminal_notice(message).await;
     }
 

@@ -138,16 +138,36 @@ async fn spawn_fake_supervisor(
                                 None,
                             )
                         }
-                        "create" => response_success(
-                            Some(&id),
-                            command_type,
-                            Some(json!({
-                                "activeSessionId": "child-live",
-                                "sessionId": "child-file",
-                                "sessionFile": *child_session_file,
-                                "sessionName": "f20-worker",
-                            })),
-                        ),
+                        "create" => {
+                            // Seed the child's session file with digestable
+                            // rows: the no-reply settle notice extracts its
+                            // salvage summary from them. The rows carry no
+                            // prompt text and no user row, so the
+                            // prompt-retry arbitration stays untouched.
+                            std::fs::write(
+                                &*child_session_file,
+                                concat!(
+                                    "{\"type\":\"message\",\"id\":\"s1\",\"timestamp\":\"t\",",
+                                    "\"message\":{\"role\":\"assistant\",\"content\":[",
+                                    "{\"type\":\"toolCall\",\"name\":\"bash\",",
+                                    "\"arguments\":{\"command\":\"ls crates\"}}]}}\n",
+                                    "{\"type\":\"message\",\"id\":\"s2\",\"timestamp\":\"t\",",
+                                    "\"message\":{\"role\":\"assistant\",\"content\":[",
+                                    "{\"type\":\"text\",\"text\":\"checking the workspace layout\"}]}}\n",
+                                ),
+                            )
+                            .unwrap();
+                            response_success(
+                                Some(&id),
+                                command_type,
+                                Some(json!({
+                                    "activeSessionId": "child-live",
+                                    "sessionId": "child-file",
+                                    "sessionFile": *child_session_file,
+                                    "sessionName": "f20-worker",
+                                })),
+                            )
+                        }
                         "prompt" => response_success(Some(&id), command_type, None),
                         "wait_for_idle" => {
                             tokio::time::sleep(std::time::Duration::from_millis(idle_delay_ms))
@@ -366,12 +386,19 @@ async fn a_settled_child_without_a_reply_delivers_the_terminal_notice() {
         follow_up["rlmNoticeNonce"].as_str().is_some(),
         "the notice carries the one-shot capability the parent's queue admission consumes"
     );
+    // The notice carries what the child was last doing: the salvage
+    // summary is extracted from the rows the fake wrote to the child's
+    // session file at create.
     assert_eq!(
         custom["content"],
-        "[child-exited: no-reply child:f20-worker]\n\nLast assistant text: the child final answer"
+        "[child-exited: no-reply child:f20-worker]\n\nLast assistant text: the child final answer\n\nSalvage: last tool calls: bash(ls crates); last partial text: \"checking the workspace layout\""
     );
     assert_eq!(custom["details"]["childId"], handle.rlm_child_id);
     assert_eq!(custom["details"]["sessionName"], "f20-worker");
+    assert_eq!(
+        custom["details"]["salvageSummary"],
+        "last tool calls: bash(ls crates); last partial text: \"checking the workspace layout\""
+    );
     // Exactly one notice lands: the watcher delivers once.
     let extra =
         tokio::time::timeout(std::time::Duration::from_millis(300), follow_up_rx.recv()).await;

@@ -940,6 +940,7 @@ fn spawn_name_unavailable(name: &str, depth: u32) -> anyhow::Error {
 mod host;
 mod lifecycle;
 mod registry;
+mod salvage;
 mod usage;
 
 #[cfg(test)]

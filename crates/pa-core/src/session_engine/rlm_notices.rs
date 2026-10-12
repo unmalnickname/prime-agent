@@ -28,6 +28,9 @@ pub enum RlmChildTerminalNotice {
         child_id: String,
         session_name: String,
         last_assistant_text_preview: Option<String>,
+        /// Deterministic digest of the child's last transcript rows (the
+        /// salvage summary); `None` when nothing digestable was persisted.
+        salvage_summary: Option<String>,
     },
 }
 
@@ -62,6 +65,7 @@ pub fn create_rlm_child_terminal_notice(
             child_id,
             session_name,
             last_assistant_text_preview,
+            salvage_summary,
         } => {
             let name = sanitize_message_header_value(session_name);
             let mut content = format!("[child-exited: no-reply child:{name}]");
@@ -72,11 +76,19 @@ pub fn create_rlm_child_terminal_notice(
                 content.push_str("\n\nLast assistant text: ");
                 content.push_str(preview);
             }
+            if let Some(salvage) = salvage_summary
+                .as_deref()
+                .filter(|salvage| !salvage.is_empty())
+            {
+                content.push_str("\n\nSalvage: ");
+                content.push_str(salvage);
+            }
             let details = json!({
                 "kind": "completed_without_reply",
                 "childId": child_id,
                 "sessionName": session_name,
                 "lastAssistantTextPreview": last_assistant_text_preview,
+                "salvageSummary": salvage_summary,
             });
             (content, details)
         }
@@ -125,6 +137,7 @@ mod tests {
             child_id: "sub-8fb5284a".to_string(),
             session_name: "f20-worker".to_string(),
             last_assistant_text_preview: Some("done with the task".to_string()),
+            salvage_summary: None,
         };
         let message = create_rlm_child_terminal_notice(&notice, 1_000);
         assert_eq!(message.custom_type, "rlm_child_terminal_notice");
@@ -141,6 +154,32 @@ mod tests {
         assert_eq!(details["childId"], "sub-8fb5284a");
         assert_eq!(details["sessionName"], "f20-worker");
         assert_eq!(details["lastAssistantTextPreview"], "done with the task");
+    }
+
+    #[test]
+    fn no_reply_notice_appends_the_salvage_summary() {
+        let notice = RlmChildTerminalNotice::CompletedWithoutReply {
+            child_id: "sub-8fb5284a".to_string(),
+            session_name: "f20-worker".to_string(),
+            last_assistant_text_preview: None,
+            salvage_summary: Some(
+                "last tool calls: bash(ls crates); last partial text: \"checking the workspace layout\""
+                    .to_string(),
+            ),
+        };
+        let message = create_rlm_child_terminal_notice(&notice, 5_000);
+        assert_eq!(
+            message.content,
+            UserContent::Text(
+                "[child-exited: no-reply child:f20-worker]\n\nSalvage: last tool calls: bash(ls crates); last partial text: \"checking the workspace layout\""
+                    .to_string()
+            )
+        );
+        let details = message.details.unwrap();
+        assert_eq!(
+            details["salvageSummary"],
+            "last tool calls: bash(ls crates); last partial text: \"checking the workspace layout\""
+        );
     }
 
     #[test]
