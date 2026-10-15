@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../app_theme.dart';
 import '../state.dart';
@@ -38,7 +39,10 @@ class WorkspaceRail extends StatelessWidget {
                   child: _RailButton(
                     selected: selected,
                     unread: state.unreadFor(ws.id),
-                    onTap: () => state.selectWorkspace(i),
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      state.selectWorkspace(i);
+                    },
                     child: Text(ws.emoji, style: const TextStyle(fontSize: 22)),
                   ),
                 );
@@ -465,10 +469,14 @@ class _SessionTile extends StatelessWidget {
     final selected = session.id == state.sessionId && state.view == ViewKind.chat;
     return InkWell(
       onTap: () {
+        HapticFeedback.lightImpact();
         state.selectSession(session.id);
         if (session.isRoom) state.openView(ViewKind.groupRoom);
       },
-      onLongPress: () => _showMenu(context),
+      onLongPress: () {
+        HapticFeedback.mediumImpact();
+        _showMenu(context);
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),

@@ -55,13 +55,80 @@ class OmbApp extends StatelessWidget {
   }
 }
 
-/// Responsive shell: Discord-style rail (always) + session drawer
-/// (side-by-side on wide, overlay on phone) + main view.
+/// Responsive shell.
+///
+/// Phone: Discord's OverlappingPanels model — the workspace rail + session
+/// drawer form a stationary back layer, and the content is the TOP layer that
+/// slides right (and shrinks slightly) over them, tracking the finger. New
+/// sessions therefore always come up on top of the rail/drawer, and the rail
+/// is only reachable in the exposed gap. Wide screens keep rail + sessions
+/// inline beside the content.
 ///
 /// The listenable sits here (inside the route) so state changes rebuild
 /// this subtree; a builder above MaterialApp can't reach cached routes.
-class AppShell extends StatelessWidget {
+class AppShell extends StatefulWidget {
   const AppShell({super.key});
+
+  @override
+  State<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends State<AppShell>
+    with SingleTickerProviderStateMixin {
+  static const _drawerWidth = 340.0;
+
+  late final AnimationController _anim;
+  bool _hapticFired = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _anim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 240),
+      value: _appState.drawerOpen ? 1 : 0,
+    );
+    _appState.addListener(_syncDrawer);
+  }
+
+  @override
+  void dispose() {
+    _appState.removeListener(_syncDrawer);
+    _anim.dispose();
+    super.dispose();
+  }
+
+  void _syncDrawer() {
+    final target = _appState.drawerOpen ? 1.0 : 0.0;
+    if ((_anim.value - target).abs() > 0.001 && !_anim.isAnimating) {
+      _anim.animateTo(target, curve: Curves.easeOutCubic);
+    }
+  }
+
+  /// One light tick per open/close threshold crossing, like Discord.
+  void _thresholdHaptic(double value) {
+    final past = value >= 0.5;
+    if (past != _hapticFired) {
+      _hapticFired = past;
+      HapticFeedback.selectionClick();
+    }
+  }
+
+  void _dragUpdate(double dx) {
+    final next = (_anim.value + dx / _drawerWidth).clamp(0.0, 1.0);
+    _anim.value = next;
+    _thresholdHaptic(next);
+  }
+
+  void _dragEnd(double velocity) {
+    final open = velocity > 250
+        ? true
+        : velocity < -250
+            ? false
+            : _anim.value >= 0.5;
+    _appState.setDrawer(open);
+    // _syncDrawer (via listener) animates to the settled position.
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +139,6 @@ class AppShell extends StatelessWidget {
         final showDrawerInline = width >= 900;
         final state = _appState;
 
-        // Discord-style phone layout: the workspace rail lives inside the
-        // slide-over drawer next to the session list, not beside the content.
         final drawerContent = showDrawerInline
             ? SessionDrawer(state: state)
             : Row(
@@ -97,55 +162,26 @@ class AppShell extends StatelessWidget {
           },
           child: Scaffold(
             body: SafeArea(
-              child: Stack(
-                children: [
-                  // Swipe right to reveal the drawer, swipe left to dismiss —
-                  // same gestures as the Discord mobile app.
-                  GestureDetector(
-                    onHorizontalDragEnd: (details) {
-                      final v = details.primaryVelocity ?? 0;
-                      if (v > 250 && !showDrawerInline) {
-                        state.setDrawer(true);
-                      } else if (v < -250 && !showDrawerInline) {
-                        state.setDrawer(false);
-                      }
-                    },
-                    child: Row(
+              child: showDrawerInline
+                  ? Row(
                       children: [
-                        if (showDrawerInline) ...[
-                          WorkspaceRail(state: state),
-                          drawerContent,
-                        ],
+                        WorkspaceRail(state: state),
+                        drawerContent,
                         Expanded(child: content),
-                        // Side panel on very wide screens, otherwise the panel is the main view.
+                        // Side panel on very wide screens.
                         if (width >= 1200 && state.view != ViewKind.chat)
                           SizedBox(width: 380, child: _panelView(state)),
                       ],
+                    )
+                  : _PhonePanels(
+                      anim: _anim,
+                      drawerWidth: _drawerWidth,
+                      backLayer: drawerContent,
+                      frontLayer: content,
+                      onDragUpdate: _dragUpdate,
+                      onDragEnd: _dragEnd,
+                      onDismiss: () => state.setDrawer(false),
                     ),
-                  ),
-                  // Phone: combined rail + sessions as a slide-over drawer.
-                  if (!showDrawerInline && state.drawerOpen) ...[
-                    GestureDetector(
-                      onTap: () => state.setDrawer(false),
-                      onHorizontalDragEnd: (details) {
-                        if ((details.primaryVelocity ?? 0) < -250) {
-                          state.setDrawer(false);
-                        }
-                      },
-                      child: Container(color: Colors.black54),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: AnimatedSlide(
-                        duration: const Duration(milliseconds: 220),
-                        curve: Curves.easeOutCubic,
-                        offset: state.drawerOpen ? Offset.zero : const Offset(-1, 0),
-                        child: SizedBox(width: 340, child: drawerContent),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
             ),
           ),
         );
@@ -207,4 +243,80 @@ class AppShell extends StatelessWidget {
         ViewKind.activity => ActivityPanel(state: state),
         _ => const SizedBox.shrink(),
       };
+}
+
+/// Discord's OverlappingPanels on phones: [backLayer] (rail + sessions) is
+/// painted first and never moves; [frontLayer] (the content) is painted on
+/// top and slides right over it with a slight scale-down, tracking the finger.
+/// New sessions/threads therefore always stack above the rail, and the rail
+/// sits in the revealed gap behind.
+class _PhonePanels extends StatelessWidget {
+  final Animation<double> anim;
+  final double drawerWidth;
+  final Widget backLayer;
+  final Widget frontLayer;
+  final void Function(double dx) onDragUpdate;
+  final void Function(double velocity) onDragEnd;
+  final VoidCallback onDismiss;
+
+  const _PhonePanels({
+    required this.anim,
+    required this.drawerWidth,
+    required this.backLayer,
+    required this.frontLayer,
+    required this.onDragUpdate,
+    required this.onDragEnd,
+    required this.onDismiss,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragUpdate: (d) => onDragUpdate(d.delta.dx),
+      onHorizontalDragEnd: (d) => onDragEnd(d.primaryVelocity ?? 0),
+      child: AnimatedBuilder(
+        animation: anim,
+        builder: (context, _) {
+          final t = anim.value;
+          return Stack(
+            children: [
+              // Back layer: stationary rail + workspace/session list.
+              Positioned(
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: drawerWidth,
+                child: backLayer,
+              ),
+              // Front layer: the content, sliding over the back layer.
+              Transform.translate(
+                offset: Offset(t * drawerWidth, 0),
+                child: Transform.scale(
+                  scale: 1 - t * 0.06,
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: kContentBg,
+                      borderRadius: BorderRadius.circular(t * 18),
+                      boxShadow: t > 0
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.45 * t),
+                                blurRadius: 24 * t,
+                                offset: Offset(-6 * t, 0),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: frontLayer,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

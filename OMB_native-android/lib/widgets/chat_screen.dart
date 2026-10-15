@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../app_theme.dart';
 import '../state.dart';
@@ -94,7 +95,10 @@ class _ChatHeader extends StatelessWidget {
           if (MediaQuery.sizeOf(context).width < 900)
             IconButton(
               icon: const Icon(Icons.menu, color: kTextDim, size: 22),
-              onPressed: () => state.setDrawer(!state.drawerOpen),
+              onPressed: () {
+                HapticFeedback.selectionClick();
+                state.setDrawer(!state.drawerOpen);
+              },
             ),
           BotAvatar(emoji: session.emoji, size: 34),
           const SizedBox(width: 10),
