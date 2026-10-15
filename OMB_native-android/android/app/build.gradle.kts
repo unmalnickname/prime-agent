@@ -27,9 +27,19 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Stable release signing when CI provides OMB_KEYSTORE_B64 etc.
+            // (so every CI APK has the same signature and updates in place);
+            // falls back to debug keys for local builds.
+            signingConfig = if (System.getenv("OMB_KEYSTORE_FILE") != null) {
+                signingConfigs.create("ombRelease") {
+                    storeFile = file(System.getenv("OMB_KEYSTORE_FILE"))
+                    storePassword = System.getenv("OMB_KEYSTORE_PASS")
+                    keyAlias = System.getenv("OMB_KEY_ALIAS")
+                    keyPassword = System.getenv("OMB_KEY_PASS")
+                }
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }
