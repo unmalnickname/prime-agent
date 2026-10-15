@@ -14,6 +14,12 @@ on:
           - apk
           - web
         default: apk+web
+  # Also runs on pushes that touch the mockup, so the workflow is triggerable
+  # from any branch (workflow_dispatch requires the file on the default branch).
+  push:
+    paths:
+      - OMB_native-android/**
+      - .github/workflows/omb-mockup-build.yml
 jobs:
   build:
     runs-on: ubuntu-latest
