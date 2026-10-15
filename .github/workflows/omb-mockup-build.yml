@@ -46,18 +46,29 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
-      - name: Decode release keystore
-        if: ${{ inputs.build != 'web' && secrets.OMB_KEYSTORE_B64 != '' }}
-        env:
-          OMB_KEYSTORE_B64: ${{ secrets.OMB_KEYSTORE_B64 }}
-        run: echo "$OMB_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/omb.jks"
-      - name: Build Android APK
+      # The secrets context is not available in step `if:` conditions, so the
+      # skip decision lives in the shell: without the secret the build falls
+      # back to debug keys (fine for local-style runs).
+      - name: Decode release keystore (optional)
         if: ${{ inputs.build != 'web' }}
         env:
-          OMB_KEYSTORE_FILE: ${{ secrets.OMB_KEYSTORE_B64 != '' && format('{0}/omb.jks', runner.temp) || '' }}
+          OMB_KEYSTORE_B64: ${{ secrets.OMB_KEYSTORE_B64 }}
           OMB_KEYSTORE_PASS: ${{ secrets.OMB_KEYSTORE_PASS }}
           OMB_KEY_ALIAS: ${{ secrets.OMB_KEY_ALIAS }}
           OMB_KEY_PASS: ${{ secrets.OMB_KEY_PASS }}
+        run: |
+          if [ -n "$OMB_KEYSTORE_B64" ]; then
+            echo "$OMB_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/omb.jks"
+            echo "OMB_KEYSTORE_FILE=$RUNNER_TEMP/omb.jks" >> "$GITHUB_ENV"
+            echo "OMB_KEYSTORE_PASS=$OMB_KEYSTORE_PASS" >> "$GITHUB_ENV"
+            echo "OMB_KEY_ALIAS=$OMB_KEY_ALIAS" >> "$GITHUB_ENV"
+            echo "OMB_KEY_PASS=$OMB_KEY_PASS" >> "$GITHUB_ENV"
+            echo "Release keystore decoded."
+          else
+            echo "No OMB_KEYSTORE_B64 secret; building with debug keys."
+          fi
+      - name: Build Android APK
+        if: ${{ inputs.build != 'web' }}
         run: flutter build apk --release
       - name: Build web bundle
         if: ${{ inputs.build != 'apk' }}
