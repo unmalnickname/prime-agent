@@ -1,0 +1,53 @@
+# On-demand Flutter build for the OMB_native-android mockup: run this on any
+# branch to get an Android APK and web bundle as workflow artifacts without a
+# local toolchain build (Gradle + NDK downloads are heavy; CI hosts have them).
+# Test-only helper for the UI mockup; nothing here gates the Rust workspace.
+name: omb-mockup-build
+on:
+  workflow_dispatch:
+    inputs:
+      build:
+        description: What to build
+        type: choice
+        options:
+          - apk+web
+          - apk
+          - web
+        default: apk+web
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: OMB_native-android
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      # Pin to the exact local toolchain so CI output matches local runs.
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.44.8
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - name: Build Android APK
+        if: ${{ inputs.build != 'web' }}
+        run: flutter build apk --release
+      - name: Build web bundle
+        if: ${{ inputs.build != 'apk' }}
+        run: flutter build web --release
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.build != 'web' }}
+        with:
+          name: omb-android-apk
+          path: OMB_native-android/build/app/outputs/flutter-apk/app-release.apk
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.build != 'apk' }}
+        with:
+          name: omb-web-bundle
+          path: OMB_native-android/build/web
