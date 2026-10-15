@@ -31,7 +31,7 @@ class _InspectorScreenState extends State<InspectorScreen> {
           ),
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text('Inspector',
                     style: TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800)),
               ),
@@ -91,7 +91,7 @@ class _InspectorScreenState extends State<InspectorScreen> {
               children: [
                 Container(width: 3, height: 28, color: color),
                 const SizedBox(width: 10),
-                Text(time, style: const TextStyle(color: kTextDim, fontSize: 11)),
+                Text(time, style: TextStyle(color: kTextDim, fontSize: 11)),
                 const SizedBox(width: 10),
                 Text(label,
                     style: TextStyle(
@@ -100,7 +100,7 @@ class _InspectorScreenState extends State<InspectorScreen> {
                 Expanded(
                   child: Text(detail,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: kTextDim, fontSize: 11.5)),
+                      style: TextStyle(color: kTextDim, fontSize: 11.5)),
                 ),
               ],
             ),
@@ -176,7 +176,7 @@ class _AppsMarketScreenState extends State<AppsMarketScreen> {
           decoration: const BoxDecoration(
             border: Border(bottom: BorderSide(color: Color(0xFF3A3D44))),
           ),
-          child: const Text('Apps / MCP',
+          child: Text('Apps / MCP',
               style: TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800)),
         ),
         Expanded(
@@ -237,12 +237,12 @@ class _AppsMarketScreenState extends State<AppsMarketScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name,
-                    style: const TextStyle(
+                    style: TextStyle(
                         color: kText, fontSize: 13.5, fontWeight: FontWeight.w700)),
                 Text(desc,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: kTextDim, fontSize: 11)),
+                    style: TextStyle(color: kTextDim, fontSize: 11)),
               ],
             ),
           ),
@@ -251,7 +251,7 @@ class _AppsMarketScreenState extends State<AppsMarketScreen> {
               onPressed: () {},
               style: OutlinedButton.styleFrom(
                 foregroundColor: kGreen,
-                side: const BorderSide(color: kGreen),
+                side: BorderSide(color: kGreen),
                 visualDensity: VisualDensity.compact,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),

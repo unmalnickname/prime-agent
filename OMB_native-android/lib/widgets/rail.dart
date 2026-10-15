@@ -23,7 +23,7 @@ class WorkspaceRail extends StatelessWidget {
           _RailButton(
             selected: false,
             onTap: () {},
-            child: const Icon(Icons.add_comment_outlined, color: kGreen, size: 24),
+            child: Icon(Icons.add_comment_outlined, color: kGreen, size: 24),
           ),
           const SizedBox(height: 8),
           const _RailDivider(),
@@ -53,20 +53,20 @@ class WorkspaceRail extends StatelessWidget {
           _RailButton(
             selected: state.view == ViewKind.routines,
             onTap: () => state.openView(ViewKind.routines),
-            child: const Icon(Icons.calendar_month_outlined, color: kTextDim, size: 22),
+            child: Icon(Icons.calendar_month_outlined, color: kTextDim, size: 22),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: _RailButton(
               selected: state.view == ViewKind.teamMap,
               onTap: () => state.openView(ViewKind.teamMap),
-              child: const Icon(Icons.hub_outlined, color: kTextDim, size: 22),
+              child: Icon(Icons.hub_outlined, color: kTextDim, size: 22),
             ),
           ),
           _RailButton(
             selected: false,
             onTap: () => _showAppSettings(context),
-            child: const Icon(Icons.settings_outlined, color: kTextDim, size: 22),
+            child: Icon(Icons.settings_outlined, color: kTextDim, size: 22),
           ),
           const SizedBox(height: 12),
         ],
@@ -191,7 +191,7 @@ class SessionDrawer extends StatelessWidget {
                   Expanded(
                     child: Text(
                       state.workspace.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: kText,
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
@@ -199,7 +199,7 @@ class SessionDrawer extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Icon(Icons.unfold_more, color: kTextDim, size: 16),
+                  Icon(Icons.unfold_more, color: kTextDim, size: 16),
                 ],
               ),
             ),
@@ -307,6 +307,12 @@ class SessionDrawer extends StatelessWidget {
                   ),
                 ),
                 _ToolTile(
+                  icon: Icons.palette_outlined,
+                  label: 'Theme studio',
+                  active: state.view == ViewKind.themeStudio,
+                  onTap: () => state.openView(ViewKind.themeStudio),
+                ),
+                _ToolTile(
                   icon: Icons.keyboard_outlined,
                   label: 'Shortcuts',
                   onTap: () => showDialog(
@@ -324,7 +330,7 @@ class SessionDrawer extends StatelessWidget {
               children: [
                 const BotAvatar(emoji: '🧑‍🚀', size: 32),
                 const SizedBox(width: 10),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -417,7 +423,7 @@ class _SessionTile extends StatelessWidget {
                   Text(session.emoji, style: const TextStyle(fontSize: 18)),
                   const SizedBox(width: 10),
                   Text(session.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: kText, fontSize: 15, fontWeight: FontWeight.w800)),
                 ],
               ),
@@ -430,32 +436,32 @@ class _SessionTile extends StatelessWidget {
             ),
             ListTile(
               dense: true,
-              leading: const Icon(Icons.notifications_off_outlined, color: kTextDim),
+              leading: Icon(Icons.notifications_off_outlined, color: kTextDim),
               title: const Text('Snooze'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
               dense: true,
-              leading: const Icon(Icons.done_all, color: kTextDim),
+              leading: Icon(Icons.done_all, color: kTextDim),
               title: const Text('Mark read'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
               dense: true,
-              leading: const Icon(Icons.edit_outlined, color: kTextDim),
+              leading: Icon(Icons.edit_outlined, color: kTextDim),
               title: const Text('Edit profile'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
               dense: true,
-              leading: const Icon(Icons.archive_outlined, color: kRed),
-              title: const Text('Archive', style: TextStyle(color: kRed)),
+              leading: Icon(Icons.archive_outlined, color: kRed),
+              title: Text('Archive', style: TextStyle(color: kRed)),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
               dense: true,
-              leading: const Icon(Icons.delete_outline, color: kRed),
-              title: const Text('Delete', style: TextStyle(color: kRed)),
+              leading: Icon(Icons.delete_outline, color: kRed),
+              title: Text('Delete', style: TextStyle(color: kRed)),
               onTap: () => Navigator.pop(context),
             ),
           ],
@@ -500,9 +506,9 @@ class _SessionTile extends StatelessWidget {
               ),
             ),
             if (session.status == 'running')
-              const StatusChip(label: 'RUNNING', color: kGreen)
+              StatusChip(label: 'RUNNING', color: kGreen)
             else if (session.status == 'waiting')
-              const StatusChip(label: 'WAITING', color: kAccent)
+              StatusChip(label: 'WAITING', color: kAccent)
             else if (session.unread > 0)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),

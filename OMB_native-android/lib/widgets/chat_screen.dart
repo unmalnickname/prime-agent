@@ -56,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
             controller: _scroll,
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
             children: [
-              const Center(
+              Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
                   child: Text('— Today —', style: TextStyle(color: kTextDim, fontSize: 11)),
@@ -86,7 +86,7 @@ class _ChatHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: kContentBg,
         border: Border(bottom: BorderSide(color: Color(0xFF3A3D44))),
       ),
@@ -94,7 +94,7 @@ class _ChatHeader extends StatelessWidget {
         children: [
           if (MediaQuery.sizeOf(context).width < 900)
             IconButton(
-              icon: const Icon(Icons.menu, color: kTextDim, size: 22),
+              icon: Icon(Icons.menu, color: kTextDim, size: 22),
               onPressed: () {
                 HapticFeedback.selectionClick();
                 state.setDrawer(!state.drawerOpen);
@@ -111,7 +111,7 @@ class _ChatHeader extends StatelessWidget {
                   session.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: kText,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -123,7 +123,7 @@ class _ChatHeader extends StatelessWidget {
                       : 'claude-sonnet · effort high · ${state.approvalMode} mode',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: kTextDim, fontSize: 11),
+                  style: TextStyle(color: kTextDim, fontSize: 11),
                 ),
               ],
             ),
@@ -133,10 +133,10 @@ class _ChatHeader extends StatelessWidget {
               padding: const EdgeInsets.only(right: 4),
               child: OutlinedButton.icon(
                 onPressed: state.toggleRunning,
-                icon: const Icon(Icons.stop_circle_outlined, size: 16, color: kRed),
-                label: const Text('Stop', style: TextStyle(color: kRed, fontSize: 12)),
+                icon: Icon(Icons.stop_circle_outlined, size: 16, color: kRed),
+                label: Text('Stop', style: TextStyle(color: kRed, fontSize: 12)),
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: kRed),
+                  side: BorderSide(color: kRed),
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   visualDensity: VisualDensity.compact,
                 ),
@@ -147,10 +147,10 @@ class _ChatHeader extends StatelessWidget {
               padding: const EdgeInsets.only(right: 4),
               child: OutlinedButton.icon(
                 onPressed: state.toggleRunning,
-                icon: const Icon(Icons.play_circle_outline, size: 16, color: kGreen),
-                label: const Text('Resume', style: TextStyle(color: kGreen, fontSize: 12)),
+                icon: Icon(Icons.play_circle_outline, size: 16, color: kGreen),
+                label: Text('Resume', style: TextStyle(color: kGreen, fontSize: 12)),
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: kGreen),
+                  side: BorderSide(color: kGreen),
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   visualDensity: VisualDensity.compact,
                 ),
@@ -181,22 +181,22 @@ class _ChatHeader extends StatelessWidget {
           children: [
             const SizedBox(height: 8),
             ListTile(
-              leading: const Icon(Icons.search, color: kTextDim),
+              leading: Icon(Icons.search, color: kTextDim),
               title: const Text('Find in conversation'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: const Icon(Icons.download_outlined, color: kTextDim),
+              leading: Icon(Icons.download_outlined, color: kTextDim),
               title: const Text('Export Markdown'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: const Icon(Icons.insights_outlined, color: kTextDim),
+              leading: Icon(Icons.insights_outlined, color: kTextDim),
               title: const Text('Usage'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: const Icon(Icons.timeline, color: kTextDim),
+              leading: Icon(Icons.timeline, color: kTextDim),
               title: const Text('Activity'),
               onTap: () {
                 Navigator.pop(context);
@@ -204,7 +204,7 @@ class _ChatHeader extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.bug_report_outlined, color: kTextDim),
+              leading: Icon(Icons.bug_report_outlined, color: kTextDim),
               title: const Text('Inspector'),
               onTap: () => Navigator.pop(context),
             ),
@@ -258,7 +258,7 @@ class _MessageCard extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
                     '${msg.author} · ${msg.time}',
-                    style: const TextStyle(color: kTextDim, fontSize: 10.5),
+                    style: TextStyle(color: kTextDim, fontSize: 10.5),
                   ),
                 ),
               _bubble(),
@@ -295,7 +295,7 @@ class _MessageCard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     msg.text,
-                    style: const TextStyle(color: kTextDim, fontSize: 11),
+                    style: TextStyle(color: kTextDim, fontSize: 11),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -303,7 +303,7 @@ class _MessageCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () => state.undoCard(msg.id),
-                    child: const Text(
+                    child: Text(
                       'Undo',
                       style: TextStyle(
                         color: kAccent,
@@ -329,14 +329,14 @@ class _MessageCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.error_outline, color: kRed, size: 18),
+              Icon(Icons.error_outline, color: kRed, size: 18),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(msg.text, style: const TextStyle(color: kText, fontSize: 13)),
+                child: Text(msg.text, style: TextStyle(color: kText, fontSize: 13)),
               ),
               GestureDetector(
                 onTap: () => state.retryTurn(),
-                child: const Text(
+                child: Text(
                   'Retry',
                   style: TextStyle(color: kRed, fontSize: 12, fontWeight: FontWeight.w700),
                 ),
@@ -365,7 +365,7 @@ class _MessageCard extends StatelessWidget {
             color: msg.isUser ? kBlue.withValues(alpha: 0.25) : kSurface,
             borderRadius: BorderRadius.circular(14),
           ),
-          child: Text(msg.text, style: const TextStyle(color: kText, fontSize: 13.5, height: 1.4)),
+          child: Text(msg.text, style: TextStyle(color: kText, fontSize: 13.5, height: 1.4)),
         );
     }
   }
@@ -388,20 +388,20 @@ class _BranchSwitcher extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => state.switchBranch(msg.id, -1),
-            child: const Icon(Icons.chevron_left, color: kTextDim, size: 16),
+            child: Icon(Icons.chevron_left, color: kTextDim, size: 16),
           ),
           Text(
             '$current/$count',
-            style: const TextStyle(color: kTextDim, fontSize: 10.5),
+            style: TextStyle(color: kTextDim, fontSize: 10.5),
           ),
           GestureDetector(
             onTap: () => state.switchBranch(msg.id, 1),
-            child: const Icon(Icons.chevron_right, color: kTextDim, size: 16),
+            child: Icon(Icons.chevron_right, color: kTextDim, size: 16),
           ),
           const SizedBox(width: 8),
           GestureDetector(
             onTap: state.editLastUserMessage,
-            child: const Text(
+            child: Text(
               'Edit',
               style: TextStyle(
                 color: kTextDim,
@@ -486,7 +486,7 @@ class _ToolChip extends StatelessWidget {
           if (msg.detail != null)
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(msg.detail!, style: const TextStyle(color: kTextDim, fontSize: 11.5)),
+              child: Text(msg.detail!, style: TextStyle(color: kTextDim, fontSize: 11.5)),
             ),
         ],
       ),
@@ -515,9 +515,9 @@ class _ApprovalCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.gpp_maybe_outlined, color: kAccent, size: 18),
+              Icon(Icons.gpp_maybe_outlined, color: kAccent, size: 18),
               const SizedBox(width: 8),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Approval needed',
                   style: TextStyle(color: kAccent, fontSize: 13, fontWeight: FontWeight.w800),
@@ -528,7 +528,7 @@ class _ApprovalCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(msg.text, style: const TextStyle(color: kText, fontSize: 12.5, height: 1.35)),
+          Text(msg.text, style: TextStyle(color: kText, fontSize: 12.5, height: 1.35)),
           if (msg.command != null)
             Container(
               width: double.infinity,
@@ -576,7 +576,7 @@ class _ApprovalCard extends StatelessWidget {
           const SizedBox(height: 8),
           GestureDetector(
             onTap: () => state.resolveCard(msg.id, CardReply.denied),
-            child: const Text(
+            child: Text(
               'Cancel turn · Show details',
               style: TextStyle(
                 color: kTextDim,
@@ -612,9 +612,9 @@ class _QuestionCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.quiz_outlined, color: kBlue, size: 18),
+              Icon(Icons.quiz_outlined, color: kBlue, size: 18),
               const SizedBox(width: 8),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Bot needs your input',
                   style: TextStyle(color: kBlue, fontSize: 13, fontWeight: FontWeight.w800),
@@ -623,7 +623,7 @@ class _QuestionCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(msg.text, style: const TextStyle(color: kText, fontSize: 13, height: 1.35)),
+          Text(msg.text, style: TextStyle(color: kText, fontSize: 13, height: 1.35)),
           const SizedBox(height: 12),
           for (var i = 0; i < msg.options.length; i++)
             GestureDetector(
@@ -651,21 +651,21 @@ class _QuestionCard extends StatelessWidget {
                       ),
                       child: Text(
                         String.fromCharCode(97 + i),
-                        style: const TextStyle(color: kBlue, fontSize: 11, fontWeight: FontWeight.w800),
+                        style: TextStyle(color: kBlue, fontSize: 11, fontWeight: FontWeight.w800),
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: Text(msg.options[i], style: const TextStyle(color: kText, fontSize: 13)),
+                      child: Text(msg.options[i], style: TextStyle(color: kText, fontSize: 13)),
                     ),
-                    const Icon(Icons.touch_app_outlined, color: kTextDim, size: 14),
+                    Icon(Icons.touch_app_outlined, color: kTextDim, size: 14),
                   ],
                 ),
               ),
             ),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Or type your own answer in the composer…',
                   style: TextStyle(color: kTextDim, fontSize: 11.5),
@@ -702,7 +702,7 @@ class _SecretCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               Icon(Icons.lock_outline, color: kPurple, size: 18),
               SizedBox(width: 8),
@@ -713,7 +713,7 @@ class _SecretCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(msg.text, style: const TextStyle(color: kText, fontSize: 13)),
+          Text(msg.text, style: TextStyle(color: kText, fontSize: 13)),
           const SizedBox(height: 12),
           const TextField(
             obscureText: true,
@@ -762,12 +762,12 @@ class _WidgetCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.dashboard_customize_outlined, color: kAccent, size: 18),
+              Icon(Icons.dashboard_customize_outlined, color: kAccent, size: 18),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   msg.text,
-                  style: const TextStyle(color: kText, fontSize: 13, fontWeight: FontWeight.w800),
+                  style: TextStyle(color: kText, fontSize: 13, fontWeight: FontWeight.w800),
                 ),
               ),
             ],
@@ -778,9 +778,9 @@ class _WidgetCard extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 6),
               child: Row(
                 children: [
-                  const Icon(Icons.circle_outlined, color: kTextDim, size: 10),
+                  Icon(Icons.circle_outlined, color: kTextDim, size: 10),
                   const SizedBox(width: 8),
-                  Text(option, style: const TextStyle(color: kTextDim, fontSize: 12.5)),
+                  Text(option, style: TextStyle(color: kTextDim, fontSize: 12.5)),
                 ],
               ),
             ),
@@ -823,7 +823,7 @@ class _VerifyCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               Icon(Icons.verified_outlined, color: kGreen, size: 18),
               SizedBox(width: 8),
@@ -845,12 +845,12 @@ class _VerifyCard extends StatelessWidget {
                     size: 15,
                   ),
                   const SizedBox(width: 8),
-                  Text(step.label, style: const TextStyle(color: kText, fontSize: 12.5)),
+                  Text(step.label, style: TextStyle(color: kText, fontSize: 12.5)),
                 ],
               ),
             ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Save as skill',
             style: TextStyle(
               color: kAccent,
@@ -892,16 +892,16 @@ class _ScreenshotCard extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Center(
+            child: Center(
               child: Icon(Icons.desktop_windows_outlined, color: kTextDim, size: 34),
             ),
           ),
           const SizedBox(height: 6),
-          Text(msg.text, style: const TextStyle(color: kTextDim, fontSize: 10.5)),
+          Text(msg.text, style: TextStyle(color: kTextDim, fontSize: 10.5)),
           if (msg.caption != null)
             Text(
               msg.caption!,
-              style: const TextStyle(color: kAccent, fontSize: 11, fontWeight: FontWeight.w600),
+              style: TextStyle(color: kAccent, fontSize: 11, fontWeight: FontWeight.w600),
             ),
         ],
       ),
@@ -920,7 +920,7 @@ class _QueuedStrip extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
       child: Row(
         children: [
-          const Icon(Icons.queue, color: kAccent, size: 15),
+          Icon(Icons.queue, color: kAccent, size: 15),
           const SizedBox(width: 8),
           Expanded(
             child: SizedBox(
@@ -951,13 +951,13 @@ class _QueuedStrip extends StatelessWidget {
               onTap: () => state.steerNow(index),
               child: Text(
                 state.queue[index],
-                style: const TextStyle(color: kText, fontSize: 11),
+                style: TextStyle(color: kText, fontSize: 11),
               ),
             ),
             const SizedBox(width: 6),
             GestureDetector(
               onTap: () => state.steerNow(index),
-              child: const Text(
+              child: Text(
                 'steer',
                 style: TextStyle(color: kAccent, fontSize: 10.5, fontWeight: FontWeight.w800),
               ),
@@ -965,7 +965,7 @@ class _QueuedStrip extends StatelessWidget {
             const SizedBox(width: 6),
             GestureDetector(
               onTap: () => state.cancelQueued(index),
-              child: const Icon(Icons.close, color: kTextDim, size: 12),
+              child: Icon(Icons.close, color: kTextDim, size: 12),
             ),
           ],
         ),
@@ -1014,14 +1014,14 @@ class _ComposerState extends State<_Composer> {
                   onTap: () => _pickApprovalMode(context),
                 ),
                 const SizedBox(width: 6),
-                const _ComposerChip(
+                _ComposerChip(
                   icon: Icons.folder_outlined,
                   label: 'place',
                   color: kTextDim,
                 ),
                 const Spacer(),
                 if (state.running && state.thread.isNotEmpty)
-                  const _ComposerChip(
+                  _ComposerChip(
                     icon: Icons.warning_amber_outlined,
                     label: 'compact',
                     color: kAccent,
@@ -1041,12 +1041,12 @@ class _ComposerState extends State<_Composer> {
                     IconButton(
                       onPressed: state.editLastUserMessage,
                       tooltip: 'Edit last message (↑)',
-                      icon: const Icon(Icons.north, color: kTextDim, size: 18),
+                      icon: Icon(Icons.north, color: kTextDim, size: 18),
                     )
                   else
                     IconButton(
                       onPressed: () {},
-                      icon: const Icon(Icons.add_circle_outline, color: kTextDim, size: 22),
+                      icon: Icon(Icons.add_circle_outline, color: kTextDim, size: 22),
                     ),
                   Expanded(
                     child: TextField(
@@ -1067,7 +1067,7 @@ class _ComposerState extends State<_Composer> {
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.mic_none, color: kTextDim, size: 22),
+                    icon: Icon(Icons.mic_none, color: kTextDim, size: 22),
                   ),
                   const SizedBox(width: 2),
                   FilledButton(
@@ -1113,12 +1113,12 @@ class _ComposerState extends State<_Composer> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 10),
-              const Text('Approval mode', style: TextStyle(color: kText, fontWeight: FontWeight.w800)),
+              Text('Approval mode', style: TextStyle(color: kText, fontWeight: FontWeight.w800)),
               for (final mode in ['ask', 'edits', 'auto', 'full', 'custom'])
                 ListTile(
                   title: Text(mode),
                   trailing: mode == widget.state.approvalMode
-                      ? const Icon(Icons.check, color: kAccent)
+                      ? Icon(Icons.check, color: kAccent)
                       : null,
                   onTap: () {
                     widget.state.setApprovalMode(mode);

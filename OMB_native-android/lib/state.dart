@@ -19,6 +19,7 @@ enum ViewKind {
   appsMarket,
   onboarding,
   setupStates,
+  themeStudio,
 }
 
 enum MsgKind {

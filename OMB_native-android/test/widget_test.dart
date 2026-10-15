@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:omb_native/main.dart';
+import 'package:omb_native/theme_palette.dart';
 
 void main() {
   /// Tall surface so the whole transcript builds (ListView only builds
@@ -58,5 +59,30 @@ void main() {
 
     expect(find.text('Bot needs your input'), findsNothing);
     expect(find.textContaining('You answered'), findsOneWidget);
+  });
+
+  test('topic themes generate deterministically and distinctly', () {
+    final a = Palette.fromTopic('Weyland-Yutani Corporation');
+    final b = Palette.fromTopic('Weyland-Yutani Corporation');
+    final c = Palette.fromTopic('Cyberpunk 2077');
+
+    expect(a.accent, b.accent); // same topic → same palette
+    expect(a.accent, isNot(c.accent)); // different topics → different hues
+    expect(a.name, 'Weyland-Yutani Corporation');
+  });
+
+  test('theme controller swaps palettes and notifies', () {
+    final c = ThemeController();
+    var notified = 0;
+    c.addListener(() => notified++);
+
+    c.setCurated(kWeylandYutaniPalette);
+    expect(c.palette.name, 'Weyland-Yutani');
+    expect(c.topic, isNull);
+
+    c.setTopic('Dune');
+    expect(c.topic, 'Dune');
+    expect(c.palette.name, 'Dune');
+    expect(notified, 2);
   });
 }

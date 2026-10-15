@@ -178,7 +178,7 @@ class _RoutineCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: kText,
                           fontSize: 13.5,
                           fontWeight: FontWeight.w700,
@@ -189,8 +189,8 @@ class _RoutineCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text(schedule, style: const TextStyle(color: kTextDim, fontSize: 11.5)),
-                Text(detail, style: const TextStyle(color: kTextDim, fontSize: 11)),
+                Text(schedule, style: TextStyle(color: kTextDim, fontSize: 11.5)),
+                Text(detail, style: TextStyle(color: kTextDim, fontSize: 11)),
               ],
             ),
           ),
@@ -341,7 +341,7 @@ class _MapNode extends StatelessWidget {
             color: kSurfaceAlt,
             borderRadius: BorderRadius.circular(999),
           ),
-          child: Text(label, style: const TextStyle(color: kText, fontSize: 10.5)),
+          child: Text(label, style: TextStyle(color: kText, fontSize: 10.5)),
         ),
       ],
     );
@@ -385,10 +385,10 @@ class AppSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: kDrawerBg,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: kText),
+          icon: Icon(Icons.arrow_back, color: kText),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('App Settings', style: TextStyle(color: kText, fontWeight: FontWeight.w800)),
+        title: Text('App Settings', style: TextStyle(color: kText, fontWeight: FontWeight.w800)),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -453,7 +453,7 @@ class _ScreenHeader extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.menu, color: kTextDim, size: 22),
+            icon: Icon(Icons.menu, color: kTextDim, size: 22),
             onPressed: onMenu,
           ),
           Expanded(
@@ -462,13 +462,13 @@ class _ScreenHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: kText,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                Text(subtitle, style: const TextStyle(color: kTextDim, fontSize: 11)),
+                Text(subtitle, style: TextStyle(color: kTextDim, fontSize: 11)),
               ],
             ),
           ),

@@ -83,7 +83,7 @@ class _UiKitScreenState extends State<UiKitScreen> {
                     child: Wrap(
                       spacing: 8,
                       runSpacing: 8,
-                      children: const [
+                      children: [
                         StatusChip(label: 'running', color: kAccent),
                         StatusChip(label: 'completed', color: kGreen),
                         StatusChip(label: 'failed', color: kRed),
@@ -108,7 +108,7 @@ class _UiKitScreenState extends State<UiKitScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: TitledCard(title: 'Metric card', children: const [
+                    child: TitledCard(title: 'Metric card', children: [
                       Text('\$4.20', style: TextStyle(color: kAccent, fontSize: 26, fontWeight: FontWeight.w800)),
                       SizedBox(height: 2),
                       Text('spend this month · +12%', style: TextStyle(color: kTextDim, fontSize: 11)),
@@ -116,7 +116,7 @@ class _UiKitScreenState extends State<UiKitScreen> {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: TitledCard(title: 'Status card', children: const [
+                    child: TitledCard(title: 'Status card', children: [
                       Row(children: [
                         Icon(Icons.circle, color: kGreen, size: 10),
                         SizedBox(width: 8),
@@ -154,14 +154,14 @@ class _UiKitScreenState extends State<UiKitScreen> {
                     activeThumbColor: kGreen,
                     onChanged: (v) => setState(() => _switchOn = v),
                   ),
-                  const Text('Enable feature', style: TextStyle(color: kText, fontSize: 13)),
+                  Text('Enable feature', style: TextStyle(color: kText, fontSize: 13)),
                   const SizedBox(width: 16),
                   Checkbox(
                     value: _toggle2,
                     activeColor: kAccent,
                     onChanged: (v) => setState(() => _toggle2 = v ?? false),
                   ),
-                  const Text('Check me', style: TextStyle(color: kText, fontSize: 13)),
+                  Text('Check me', style: TextStyle(color: kText, fontSize: 13)),
                 ],
               ),
               Slider(
@@ -196,12 +196,12 @@ class _UiKitScreenState extends State<UiKitScreen> {
                   const SizedBox(width: 10),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.filter_list, color: kTextDim),
+                    icon: Icon(Icons.filter_list, color: kTextDim),
                   ),
                 ],
               ),
               _category('Progress & feedback'),
-              const LinearProgressIndicator(
+              LinearProgressIndicator(
                 value: 0.65,
                 color: kAccent,
                 backgroundColor: kSurfaceAlt,
@@ -209,7 +209,7 @@ class _UiKitScreenState extends State<UiKitScreen> {
               ),
               const SizedBox(height: 12),
               Row(
-                children: const [
+                children: [
                   SizedBox(
                     width: 22,
                     height: 22,
@@ -329,8 +329,8 @@ class _UiKitScreenState extends State<UiKitScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(label, style: const TextStyle(color: kTextDim, fontSize: 12)),
-                                Text(value, style: const TextStyle(color: kText, fontSize: 12, fontWeight: FontWeight.w700)),
+                                Text(label, style: TextStyle(color: kTextDim, fontSize: 12)),
+                                Text(value, style: TextStyle(color: kText, fontSize: 12, fontWeight: FontWeight.w700)),
                               ],
                             ),
                           ),
@@ -370,7 +370,7 @@ class _UiKitScreenState extends State<UiKitScreen> {
           children: [
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: kAccent,
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
@@ -399,11 +399,11 @@ class _UiKitScreenState extends State<UiKitScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: TextStyle(color: color, fontSize: 12.5, fontWeight: FontWeight.w700)),
-                  Text(sub, style: const TextStyle(color: kTextDim, fontSize: 11)),
+                  Text(sub, style: TextStyle(color: kTextDim, fontSize: 11)),
                 ],
               ),
             ),
-            const Icon(Icons.close, color: kTextDim, size: 16),
+            Icon(Icons.close, color: kTextDim, size: 16),
           ],
         ),
       );
@@ -463,12 +463,12 @@ class _KitHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Component Library',
             style: TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             'Every building block for the full product UI',
             style: TextStyle(color: kTextDim, fontSize: 12),
           ),
@@ -502,7 +502,7 @@ class _GhostChip extends StatelessWidget {
           border: Border.all(color: const Color(0xFF4A4E57)),
           borderRadius: BorderRadius.circular(999),
         ),
-        child: Text(label, style: const TextStyle(color: kTextDim, fontSize: 12)),
+        child: Text(label, style: TextStyle(color: kTextDim, fontSize: 12)),
       );
 }
 
@@ -517,7 +517,7 @@ class _EmptyState extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: const Color(0xFF3E424A)),
         ),
-        child: const Column(
+        child: Column(
           children: [
             Icon(Icons.inbox_outlined, color: kTextDim, size: 38),
             SizedBox(height: 10),

@@ -10,8 +10,10 @@ import 'widgets/panels.dart';
 import 'widgets/panels_screen.dart';
 import 'widgets/rail.dart';
 import 'widgets/room_palette_onboarding.dart';
+import 'widgets/theme_picker.dart';
 import 'widgets/uikit.dart';
 import 'widgets/wizard_call_usage.dart';
+import 'theme_palette.dart';
 
 final _appState = AppState();
 
@@ -26,6 +28,21 @@ void main() {
     systemNavigationBarIconBrightness: Brightness.light,
   ));
   final params = Uri.base.queryParameters;
+  // Theme deep links: ?theme=weyland-yutani (curated) or ?topic=<any words>.
+  final topic = params['topic'];
+  if (topic != null && topic.trim().isNotEmpty) {
+    themeController.setTopic(topic);
+  } else {
+    final themeName = params['theme']?.toLowerCase();
+    if (themeName != null) {
+      for (final p in kCuratedThemes) {
+        if (p.name.toLowerCase().replaceAll(' ', '-') == themeName) {
+          themeController.setCurated(p);
+          break;
+        }
+      }
+    }
+  }
   final viewName = params['view'];
   if (viewName != null) {
     for (final kind in ViewKind.values) {
@@ -43,14 +60,17 @@ class OmbApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'OpenMausBot Mobile',
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      routes: {
-        '/': (_) => const AppShell(),
-        '/app-settings': (_) => const AppSettingsScreen(),
-      },
+    return ListenableBuilder(
+      listenable: themeController,
+      builder: (context, _) => MaterialApp(
+        title: 'OpenMausBot Mobile',
+        debugShowCheckedModeBanner: false,
+        theme: buildTheme(),
+        routes: {
+          '/': (_) => const AppShell(),
+          '/app-settings': (_) => const AppSettingsScreen(),
+        },
+      ),
     );
   }
 }
@@ -133,7 +153,7 @@ class _AppShellState extends State<AppShell>
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: _appState,
+      listenable: Listenable.merge([_appState, themeController]),
       builder: (context, _) {
         final width = MediaQuery.sizeOf(context).width;
         final showDrawerInline = width >= 900;
@@ -234,6 +254,8 @@ class _AppShellState extends State<AppShell>
             const OnboardingScreen(key: ValueKey('onboard')),
           ViewKind.setupStates =>
             const SetupStatesScreen(key: ValueKey('setup')),
+          ViewKind.themeStudio =>
+            const ThemePicker(key: ValueKey('theme')),
         },
       );
 

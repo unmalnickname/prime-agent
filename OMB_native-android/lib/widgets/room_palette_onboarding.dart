@@ -35,7 +35,7 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
             children: [
               const BotAvatar(emoji: '📢', size: 38),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -50,7 +50,7 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
               const SizedBox(width: 8),
               IconButton(
                 onPressed: () => state.openView(ViewKind.voiceCall),
-                icon: const Icon(Icons.call_outlined, color: kGreen, size: 20),
+                icon: Icon(Icons.call_outlined, color: kGreen, size: 20),
               ),
             ],
           ),
@@ -83,7 +83,7 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
                   subtitle: 'lead Maus · 3 bots · running',
                 ),
                 const SizedBox(height: 8),
-                const LinearProgressIndicator(
+                LinearProgressIndicator(
                   value: 0.6,
                   color: kGreen,
                   backgroundColor: kSurfaceAlt,
@@ -117,7 +117,7 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              children: const [
+              children: [
                 Icon(Icons.campaign_outlined, color: kAccent, size: 18),
                 SizedBox(width: 8),
                 Expanded(
@@ -128,7 +128,7 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Deploy gate is at migration step. Pip is fixing it. Orbit watches dashboards. '
               'Maus coordinates. Post blockers here, keep chatter to threads.',
               style: TextStyle(color: kText, fontSize: 12.5, height: 1.4),
@@ -156,12 +156,12 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name, style: const TextStyle(color: kText, fontSize: 13, fontWeight: FontWeight.w700)),
+                  Text(name, style: TextStyle(color: kText, fontSize: 13, fontWeight: FontWeight.w700)),
                   Text(role, style: TextStyle(color: color, fontSize: 11)),
                 ],
               ),
             ),
-            const Icon(Icons.more_vert, color: kTextDim, size: 16),
+            Icon(Icons.more_vert, color: kTextDim, size: 16),
           ],
         ),
       );
@@ -257,7 +257,7 @@ class _CommandPaletteState extends State<CommandPalette> {
                     title: Text(label,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: kText, fontSize: 13)),
+                        style: TextStyle(color: kText, fontSize: 13)),
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
@@ -265,7 +265,7 @@ class _CommandPaletteState extends State<CommandPalette> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(kind,
-                          style: const TextStyle(color: kTextDim, fontSize: 10)),
+                          style: TextStyle(color: kTextDim, fontSize: 10)),
                     ),
                     onTap: () => Navigator.pop(context),
                   );
@@ -275,7 +275,7 @@ class _CommandPaletteState extends State<CommandPalette> {
             Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
-                children: const [
+                children: [
                   Text('↑↓ navigate', style: TextStyle(color: kTextDim, fontSize: 10)),
                   SizedBox(width: 12),
                   Text('↵ select', style: TextStyle(color: kTextDim, fontSize: 10)),
@@ -340,13 +340,13 @@ class KeyboardShortcuts extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text('Keyboard Shortcuts',
                       style: TextStyle(color: kText, fontSize: 17, fontWeight: FontWeight.w800)),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: kTextDim, size: 20),
+                  icon: Icon(Icons.close, color: kTextDim, size: 20),
                 ),
               ],
             ),
@@ -369,7 +369,7 @@ class KeyboardShortcuts extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(key,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       color: kText,
                                       fontSize: 11,
                                       fontFamily: 'monospace')),
@@ -377,7 +377,7 @@ class KeyboardShortcuts extends StatelessWidget {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(desc,
-                                  style: const TextStyle(color: kTextDim, fontSize: 12.5)),
+                                  style: TextStyle(color: kTextDim, fontSize: 12.5)),
                             ),
                           ],
                         ),
@@ -446,12 +446,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const SizedBox(height: 18),
                   Text(title,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: kText, fontSize: 22, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 10),
                   Text(sub,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: kTextDim, fontSize: 14, height: 1.4)),
+                      style: TextStyle(color: kTextDim, fontSize: 14, height: 1.4)),
                   const SizedBox(height: 22),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -585,14 +585,14 @@ class _SetupStatesScreenState extends State<SetupStatesScreen> {
                   Text(emoji, style: const TextStyle(fontSize: 60)),
                   const SizedBox(height: 18),
                   Text(title,
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: kText, fontSize: 22, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 10),
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 380),
                     child: Text(sub,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: kTextDim, fontSize: 14, height: 1.5)),
+                        style: TextStyle(color: kTextDim, fontSize: 14, height: 1.5)),
                   ),
                   const SizedBox(height: 24),
                   if (_state == 0)

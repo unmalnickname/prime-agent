@@ -33,7 +33,7 @@ class _BotSettingsPanelState extends State<BotSettingsPanel> {
             children: [
               BotAvatar(emoji: session.emoji, size: 56),
               const SizedBox(width: 14),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -83,7 +83,7 @@ class _BotSettingsPanelState extends State<BotSettingsPanel> {
             SettingsRow(
               title: 'Approval level',
               subtitle: 'Currently: ${state.approvalMode}',
-              trailing: const Icon(Icons.tune, color: kAccent, size: 18),
+              trailing: Icon(Icons.tune, color: kAccent, size: 18),
             ),
             const SettingsRow(title: 'Chief of Staff', subtitle: 'Off · manages 0 teams'),
             const SettingsRow(title: 'Sending on your behalf', subtitle: 'Ask every time'),
@@ -184,7 +184,7 @@ class _ComputerPanelState extends State<ComputerPanel> {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -211,7 +211,7 @@ class _ComputerPanelState extends State<ComputerPanel> {
               ],
             ),
             if (state.controlLease)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: StatusChip(label: 'YOU HAVE THE WHEEL', color: kAccent),
               ),
@@ -295,7 +295,7 @@ class ActivityPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const rows = [
+    final rows = [
       ('09:15', 'bash', 'git log --oneline', 'done', kGreen),
       ('09:13', 'approval', 'curl hooks.slack.com', 'held', kAccent),
       ('09:12', 'edit', 'RELEASE-NOTES.md', 'done', kGreen),
@@ -319,16 +319,16 @@ class ActivityPanel extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Text(time, style: const TextStyle(color: kTextDim, fontSize: 11)),
+                  Text(time, style: TextStyle(color: kTextDim, fontSize: 11)),
                   const SizedBox(width: 10),
                   Text(tool,
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: kText, fontSize: 12, fontWeight: FontWeight.w700)),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(detail,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: kTextDim, fontSize: 11.5)),
+                        style: TextStyle(color: kTextDim, fontSize: 11.5)),
                   ),
                   StatusChip(label: status, color: color),
                 ],
@@ -368,7 +368,7 @@ class _PanelScaffold extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: kText,
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
@@ -377,7 +377,7 @@ class _PanelScaffold extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: onClose,
-                  icon: const Icon(Icons.close, color: kTextDim, size: 20),
+                  icon: Icon(Icons.close, color: kTextDim, size: 20),
                 ),
               ],
             ),

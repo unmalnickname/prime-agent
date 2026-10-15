@@ -34,7 +34,7 @@ class _CalendarGridScreenState extends State<CalendarGridScreen> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text('Calendar',
                     style: TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800)),
               ),
@@ -74,7 +74,7 @@ class _CalendarGridScreenState extends State<CalendarGridScreen> {
             ],
           ),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Text('Drag a bot onto any time slot · tap an event to edit',
               style: TextStyle(color: kTextDim, fontSize: 11)),
@@ -92,7 +92,7 @@ class _CalendarGridScreenState extends State<CalendarGridScreen> {
                       Expanded(
                         child: Center(
                           child: Text(day,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: kTextDim,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700)),
@@ -107,7 +107,7 @@ class _CalendarGridScreenState extends State<CalendarGridScreen> {
                       SizedBox(
                         width: 52,
                         child: Text(_hours[h],
-                            style: const TextStyle(color: kTextDim, fontSize: 10.5)),
+                            style: TextStyle(color: kTextDim, fontSize: 10.5)),
                       ),
                       for (var d = 0; d < _days.length; d++)
                         Expanded(
@@ -240,7 +240,7 @@ class _EventEditorState extends State<_EventEditor> {
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: kDrawerBg,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
@@ -252,12 +252,12 @@ class _EventEditorState extends State<_EventEditor> {
               children: [
                 Expanded(
                   child: Text(widget.event == null ? 'New event' : 'Edit event',
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: kText, fontSize: 17, fontWeight: FontWeight.w800)),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: kTextDim, size: 20),
+                  icon: Icon(Icons.close, color: kTextDim, size: 20),
                 ),
               ],
             ),
@@ -329,7 +329,7 @@ class _EventEditorState extends State<_EventEditor> {
                         color: kSurface,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Cron: 0 9 * * 1-5 · timezone local',
@@ -408,9 +408,9 @@ class _EventEditorState extends State<_EventEditor> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(color: kText, fontSize: 13)),
+                  Text(title, style: TextStyle(color: kText, fontSize: 13)),
                   if (trailing == null)
-                    Text(value, style: const TextStyle(color: kTextDim, fontSize: 11)),
+                    Text(value, style: TextStyle(color: kTextDim, fontSize: 11)),
                 ],
               ),
             ),

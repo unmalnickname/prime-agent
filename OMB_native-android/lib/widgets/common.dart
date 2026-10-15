@@ -7,18 +7,19 @@ class BotAvatar extends StatelessWidget {
   final String emoji;
   final double size;
   final bool ring;
-  final Color ringColor;
+  final Color? ringColor;
 
   const BotAvatar({
     super.key,
     required this.emoji,
     this.size = 40,
     this.ring = false,
-    this.ringColor = kGreen,
+    this.ringColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final ringPaint = ringColor ?? kGreen;
     final avatar = Container(
       width: size,
       height: size,
@@ -38,7 +39,7 @@ class BotAvatar extends StatelessWidget {
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: ringColor, width: 2),
+        border: Border.all(color: ringPaint, width: 2),
       ),
       child: avatar,
     );
@@ -55,7 +56,7 @@ class SectionHeader extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
         child: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: kTextDim,
             fontSize: 11,
             fontWeight: FontWeight.w700,
@@ -114,7 +115,7 @@ class TitledCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 color: kText,
                 fontSize: 13.5,
                 fontWeight: FontWeight.w700,
@@ -191,13 +192,13 @@ class SettingsRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(color: kText, fontSize: 14)),
+                    Text(title, style: TextStyle(color: kText, fontSize: 14)),
                     if (subtitle != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
                           subtitle!,
-                          style: const TextStyle(color: kTextDim, fontSize: 11.5),
+                          style: TextStyle(color: kTextDim, fontSize: 11.5),
                         ),
                       ),
                   ],
@@ -205,7 +206,7 @@ class SettingsRow extends StatelessWidget {
               ),
               ?trailing,
               if (trailing == null)
-                const Icon(Icons.chevron_right, color: kTextDim, size: 18),
+                Icon(Icons.chevron_right, color: kTextDim, size: 18),
             ],
           ),
         ),

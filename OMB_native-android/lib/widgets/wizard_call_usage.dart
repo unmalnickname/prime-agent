@@ -44,7 +44,7 @@ class _NewBotWizardState extends State<NewBotWizard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'New Bot',
                 style: TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800),
               ),
@@ -71,7 +71,7 @@ class _NewBotWizardState extends State<NewBotWizard> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           if (i < _step)
-                            const Icon(Icons.check, color: kGreen, size: 12),
+                            Icon(Icons.check, color: kGreen, size: 12),
                           if (i < _step) const SizedBox(width: 4),
                           Text(
                             '${i + 1} ${_steps[i]}',
@@ -96,7 +96,7 @@ class _NewBotWizardState extends State<NewBotWizard> {
             children: [
               Text(
                 _steps[_step],
-                style: const TextStyle(color: kText, fontSize: 16, fontWeight: FontWeight.w800),
+                style: TextStyle(color: kText, fontSize: 16, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 14),
               ..._stepBody(),
@@ -172,7 +172,7 @@ class _NewBotWizardState extends State<NewBotWizard> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text('1.2 KB / 4 KB · saved to ~/.prime/soul.md',
+            Text('1.2 KB / 4 KB · saved to ~/.prime/soul.md',
                 style: TextStyle(color: kTextDim, fontSize: 11)),
           ],
         2 => [
@@ -211,7 +211,7 @@ class _NewBotWizardState extends State<NewBotWizard> {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: kAccent.withValues(alpha: 0.35)),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(Icons.warning_amber_outlined, color: kAccent, size: 18),
                   SizedBox(width: 10),
@@ -246,7 +246,7 @@ class _NewBotWizardState extends State<NewBotWizard> {
             _picker('Voice engine', 'Built-in Mac', Icons.record_voice_over_outlined),
             _picker('Notifications', 'On', Icons.notifications_outlined),
             TitledCard(title: 'Preview', children: [
-              const Text('"Hi! I am ready to help."',
+              Text('"Hi! I am ready to help."',
                   style: TextStyle(color: kText, fontSize: 13)),
               const SizedBox(height: 10),
               Row(
@@ -272,7 +272,7 @@ class _NewBotWizardState extends State<NewBotWizard> {
             children: [
               Icon(icon, color: kTextDim, size: 17),
               const SizedBox(width: 8),
-              const Icon(Icons.chevron_right, color: kTextDim, size: 18),
+              Icon(Icons.chevron_right, color: kTextDim, size: 18),
             ],
           ),
         ),
@@ -308,10 +308,10 @@ class _VoiceCallOverlayState extends State<VoiceCallOverlay> {
           const SizedBox(height: 12),
           Text(
             session.name,
-            style: const TextStyle(color: kText, fontSize: 20, fontWeight: FontWeight.w800),
+            style: TextStyle(color: kText, fontSize: 20, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 4),
-          const Text('04:32 · connected', style: TextStyle(color: kGreen, fontSize: 12)),
+          Text('04:32 · connected', style: TextStyle(color: kGreen, fontSize: 12)),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -341,16 +341,16 @@ class _VoiceCallOverlayState extends State<VoiceCallOverlay> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('LIVE CAPTIONS', style: TextStyle(color: kTextDim, fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                  Text('LIVE CAPTIONS', style: TextStyle(color: kTextDim, fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1)),
                   const SizedBox(height: 12),
-                  const Text('You:', style: TextStyle(color: kBlue, fontSize: 12, fontWeight: FontWeight.w700)),
-                  const Text('"What is the status of the release notes?"', style: TextStyle(color: kText, fontSize: 13, height: 1.4)),
+                  Text('You:', style: TextStyle(color: kBlue, fontSize: 12, fontWeight: FontWeight.w700)),
+                  Text('"What is the status of the release notes?"', style: TextStyle(color: kText, fontSize: 13, height: 1.4)),
                   const SizedBox(height: 12),
-                  Text('${session.name}:', style: const TextStyle(color: kAccent, fontSize: 12, fontWeight: FontWeight.w700)),
-                  const Text('"Two commands are pending your approval — want me to walk through them?"', style: TextStyle(color: kText, fontSize: 13, height: 1.4)),
+                  Text('${session.name}:', style: TextStyle(color: kAccent, fontSize: 12, fontWeight: FontWeight.w700)),
+                  Text('"Two commands are pending your approval — want me to walk through them?"', style: TextStyle(color: kText, fontSize: 13, height: 1.4)),
                   const Spacer(),
                   Row(
-                    children: const [
+                    children: [
                       Icon(Icons.graphic_eq, color: kGreen, size: 18),
                       SizedBox(width: 8),
                       Expanded(
@@ -414,7 +414,7 @@ class UsageScreen extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text('Usage & spend',
                     style: TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800)),
               ),
@@ -474,10 +474,10 @@ class UsageScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: const TextStyle(color: kTextDim, fontSize: 10.5)),
+              Text(label, style: TextStyle(color: kTextDim, fontSize: 10.5)),
               const SizedBox(height: 4),
               Text(value,
-                  style: const TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800)),
+                  style: TextStyle(color: kText, fontSize: 18, fontWeight: FontWeight.w800)),
               Text(trend, style: TextStyle(color: color, fontSize: 10.5, fontWeight: FontWeight.w700)),
             ],
           ),
