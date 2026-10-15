@@ -72,7 +72,16 @@ class AppShell extends StatelessWidget {
         final showDrawerInline = width >= 900;
         final state = _appState;
 
-        final drawer = SessionDrawer(state: state);
+        // Discord-style phone layout: the workspace rail lives inside the
+        // slide-over drawer next to the session list, not beside the content.
+        final drawerContent = showDrawerInline
+            ? SessionDrawer(state: state)
+            : Row(
+                children: [
+                  WorkspaceRail(state: state),
+                  Expanded(child: SessionDrawer(state: state)),
+                ],
+              );
         final content = _mainView(state);
 
         return PopScope(
@@ -90,20 +99,39 @@ class AppShell extends StatelessWidget {
             body: SafeArea(
               child: Stack(
                 children: [
-                  Row(
-                    children: [
-                      WorkspaceRail(state: state),
-                      if (showDrawerInline) drawer,
-                      Expanded(child: content),
-                      // Side panel on very wide screens, otherwise the panel is the main view.
-                      if (width >= 1200 && state.view != ViewKind.chat)
-                        SizedBox(width: 380, child: _panelView(state)),
-                    ],
+                  // Swipe right to reveal the drawer, swipe left to dismiss —
+                  // same gestures as the Discord mobile app.
+                  GestureDetector(
+                    onHorizontalDragEnd: (details) {
+                      final v = details.primaryVelocity ?? 0;
+                      if (v > 250 && !showDrawerInline) {
+                        state.setDrawer(true);
+                      } else if (v < -250 && !showDrawerInline) {
+                        state.setDrawer(false);
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        if (showDrawerInline) ...[
+                          WorkspaceRail(state: state),
+                          drawerContent,
+                        ],
+                        Expanded(child: content),
+                        // Side panel on very wide screens, otherwise the panel is the main view.
+                        if (width >= 1200 && state.view != ViewKind.chat)
+                          SizedBox(width: 380, child: _panelView(state)),
+                      ],
+                    ),
                   ),
-                  // Phone: drawer as slide-over overlay.
+                  // Phone: combined rail + sessions as a slide-over drawer.
                   if (!showDrawerInline && state.drawerOpen) ...[
                     GestureDetector(
                       onTap: () => state.setDrawer(false),
+                      onHorizontalDragEnd: (details) {
+                        if ((details.primaryVelocity ?? 0) < -250) {
+                          state.setDrawer(false);
+                        }
+                      },
                       child: Container(color: Colors.black54),
                     ),
                     Align(
@@ -112,7 +140,7 @@ class AppShell extends StatelessWidget {
                         duration: const Duration(milliseconds: 220),
                         curve: Curves.easeOutCubic,
                         offset: state.drawerOpen ? Offset.zero : const Offset(-1, 0),
-                        child: SizedBox(width: 268, child: drawer),
+                        child: SizedBox(width: 340, child: drawerContent),
                       ),
                     ),
                   ],

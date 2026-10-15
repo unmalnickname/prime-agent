@@ -398,6 +398,68 @@ class _SessionTile extends StatelessWidget {
 
   const _SessionTile({required this.session, required this.state});
 
+  void _showMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              child: Row(
+                children: [
+                  Text(session.emoji, style: const TextStyle(fontSize: 18)),
+                  const SizedBox(width: 10),
+                  Text(session.name,
+                      style: const TextStyle(
+                          color: kText, fontSize: 15, fontWeight: FontWeight.w800)),
+                ],
+              ),
+            ),
+            ListTile(
+              dense: true,
+              leading: Icon(session.pinned ? Icons.push_pin : Icons.push_pin_outlined, color: kTextDim),
+              title: Text(session.pinned ? 'Unpin' : 'Pin'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              dense: true,
+              leading: const Icon(Icons.notifications_off_outlined, color: kTextDim),
+              title: const Text('Snooze'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              dense: true,
+              leading: const Icon(Icons.done_all, color: kTextDim),
+              title: const Text('Mark read'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              dense: true,
+              leading: const Icon(Icons.edit_outlined, color: kTextDim),
+              title: const Text('Edit profile'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              dense: true,
+              leading: const Icon(Icons.archive_outlined, color: kRed),
+              title: const Text('Archive', style: TextStyle(color: kRed)),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              dense: true,
+              leading: const Icon(Icons.delete_outline, color: kRed),
+              title: const Text('Delete', style: TextStyle(color: kRed)),
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final selected = session.id == state.sessionId && state.view == ViewKind.chat;
@@ -406,6 +468,7 @@ class _SessionTile extends StatelessWidget {
         state.selectSession(session.id);
         if (session.isRoom) state.openView(ViewKind.groupRoom);
       },
+      onLongPress: () => _showMenu(context),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),

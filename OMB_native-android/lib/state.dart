@@ -170,6 +170,8 @@ class AppState extends ChangeNotifier {
       .where((s) => s.workspaceId == workspaceId)
       .fold(0, (sum, s) => sum + s.unread);
 
+  /// Discord behavior: switching workspaces keeps the drawer open so the
+  /// user can pick a session next; only selecting a session closes it.
   void selectWorkspace(int index) {
     workspaceIndex = index;
     final first = sessions.firstWhere(
@@ -178,7 +180,6 @@ class AppState extends ChangeNotifier {
     );
     sessionId = first.id;
     view = ViewKind.chat;
-    drawerOpen = false;
     notifyListeners();
   }
 
