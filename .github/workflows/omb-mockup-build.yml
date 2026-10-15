@@ -20,6 +20,11 @@ on:
     paths:
       - OMB_native-android/**
       - .github/workflows/omb-mockup-build.yml
+
+# The APK is published as a rolling release asset so it can be downloaded
+# directly from the repo's Releases page.
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -57,3 +62,17 @@ jobs:
         with:
           name: omb-web-bundle
           path: OMB_native-android/build/web
+      # Publish the APK as a rolling prerelease asset so it is downloadable
+      # directly from the repo's Releases page (fixed tag, always current).
+      - name: Publish APK to release
+        if: ${{ inputs.build != 'web' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete omb-mockup-latest --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
+          gh release create omb-mockup-latest \
+            --repo "$GITHUB_REPOSITORY" \
+            --prerelease \
+            --title "OpenMausBot mockup APK (latest)" \
+            --notes "Rolling Android APK built from ${GITHUB_SHA::8} by omb-mockup-build. Install with: adb install app-release.apk (or open the file on your device after allowing installs from this source)." \
+            build/app/outputs/flutter-apk/app-release.apk
